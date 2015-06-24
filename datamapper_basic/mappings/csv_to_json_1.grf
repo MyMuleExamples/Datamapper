@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><Graph __version="3.5.0" author="861322" created="Tue Jun 23 10:24:21 IST 2015" description="CSV To JSON" guiVersion="3.4.4.P" id="1435045549000" licenseCode="Unlicensed" licenseType="Unknown" modified="Tue Jun 23 10:24:21 IST 2015" modifiedBy="861322" name="CSV_To_JSON_1" preview-file="C:/Users/861322/Desktop/Input.csv" revision="1.0" showComponentDetails="false">
+<Global>
+<Metadata __referenceCounter="1" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _type="Input" id="0fe6c4ef-2994-4b2f-acb8-d1f278a44773">
+<Record fieldDelimiter="," name="Input" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field containerType="SINGLE" label="FirstName" name="FirstName" size="10" type="string"/>
+<Field containerType="SINGLE" label="LastName" name="LastName" size="10" type="string"/>
+<Field containerType="SINGLE" eofAsDelimiter="true" label="RollNumber" name="RollNumber" size="10" type="integer"/>
+<Field __artificialType="_id" auto_filling="global_row_count" name="__id" type="long"/>
+</Record>
+</Metadata>
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/object" _dataStructure="OBJECT" _id="__id" _type="Output" id="90a42be5-6b2a-4841-8f4c-8ad2d805fc7f">
+<Record fieldDelimiter="," name="object" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __index="0" __sourcePath="{}/object/FName" containerType="SINGLE" label="FName" name="FName" type="string"/>
+<Field __index="1" __sourcePath="{}/object/LName" containerType="SINGLE" label="LName" name="LName" type="string"/>
+<Field __index="2" __sourcePath="{}/object/RollNumber" containerType="SINGLE" label="RollNumber" name="RollNumber" type="integer"/>
+</Record>
+</Metadata>
+<Dictionary>
+<Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
+<Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
+</Dictionary>
+</Global>
+<Phase number="0">
+<Node charset="UTF-8" enabled="enabled" fileURL="dict:inputPayload" guiName="CSV READER" guiX="20" guiY="20" id="DATA_READER0" quoteCharacter="both" quotedStrings="true" skipRows="1" trim="true" type="DATA_READER">
+<attr name="_data_format"><![CDATA[CSV]]></attr>
+<attr name="__dataSourceDefinition"><![CDATA[C:/Users/861322/Desktop/Input.csv]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'Input' -&gt; 'object'" guiX="460" guiY="20" id="FOREACH_INPUT_OBJECT" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = num2str(input.__id);
+//END -> DO NOT REMOVE
+output.RollNumber = input.RollNumber;
+output.FName = input.FirstName;
+output.LName = input.LastName;]]></attr>
+</Node>
+<Node cacheInMemory="true" charset="UTF-8" enabled="enabled" fileURL="dict:outputPayload" guiName="JSON WRITER" guiX="900" guiY="20" id="JSON_WRITER0" type="JSON_WRITER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<object xmlns:clover="http://www.cloveretl.com/ns/xmlmapping" clover:inPort="0">
+  <FName>$0.FName</FName>
+  <LName>$0.LName</LName>
+  <RollNumber>$0.RollNumber</RollNumber>
+</object>]]></attr>
+<attr name="__isJsonSchema"><![CDATA[false]]></attr>
+<attr name="_data_format"><![CDATA[JSON]]></attr>
+<attr name="jsonSchemaURL"><![CDATA[C:/Users/861322/Desktop/JsonSample.txt]]></attr>
+</Node>
+<Edge debugMode="true" fromNode="DATA_READER0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="0fe6c4ef-2994-4b2f-acb8-d1f278a44773" outPort="Port 0 (output)" toNode="FOREACH_INPUT_OBJECT:0"/>
+<Edge debugMode="true" fromNode="FOREACH_INPUT_OBJECT:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="90a42be5-6b2a-4841-8f4c-8ad2d805fc7f" outPort="Port 0 (out)" toNode="JSON_WRITER0:0"/>
+</Phase>
+</Graph>

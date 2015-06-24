@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.6.1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+    <http:listener-config name="HTTP_Listener_Configuration" host="localhost" port="8081" doc:name="HTTP Listener Configuration"/>
+    <file:connector name="File"  autoDelete="true" streaming="true" validateConnections="true" doc:name="File" />
+    <data-mapper:config name="CSV_To_JSON" transformationGraphPath="csv_to_json.grf" doc:name="CSV_To_JSON"/>
+    <flow name="datamapper_basicFlow_csvTOJson">
+        <file:inbound-endpoint path="Temp" connector-ref="File" responseTimeout="10000" doc:name="File" moveToDirectory="archive"/>
+        <logger message="Received Message #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
+        <data-mapper:transform config-ref="CSV_To_JSON" doc:name="CSV To JSON"/>
+        <object-to-string-transformer doc:name="Object to String"/>
+        <logger message="Output Message #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+</mule>

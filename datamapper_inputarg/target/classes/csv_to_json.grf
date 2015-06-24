@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><Graph __version="3.5.0" author="861322" created="Mon Jun 22 11:47:06 IST 2015" description="CSV To JSON" guiVersion="3.4.4.P" id="1434955937565" licenseCode="Unlicensed" licenseType="Unknown" modified="Mon Jun 22 11:47:06 IST 2015" modifiedBy="861322" name="CSV_To_JSON" preview-file="C:/Users/861322/Desktop/Input.csv" revision="1.0" showComponentDetails="false">
+<Global>
+<Metadata __referenceCounter="1" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _type="Input" id="557fbffe-e41d-4f19-b8b7-746b91ea75b8">
+<Record fieldDelimiter="," name="Input" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field containerType="SINGLE" label="FirstName" name="FirstName" size="10" type="string"/>
+<Field containerType="SINGLE" label="LastName" name="LastName" size="10" type="string"/>
+<Field containerType="SINGLE" eofAsDelimiter="true" label="RollNumber" name="RollNumber" size="10" type="integer"/>
+<Field __artificialType="_id" auto_filling="global_row_count" name="__id" type="long"/>
+</Record>
+</Metadata>
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/Output" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _type="Output" id="ae68d042-da8b-41d0-9e9a-6d0a3d7cc109">
+<Record fieldDelimiter="," name="Output" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __index="0" __sourcePath="{}/Output/FName" containerType="SINGLE" label="FName" name="FName" type="string"/>
+<Field __index="1" __sourcePath="{}/Output/LName" containerType="SINGLE" label="LName" name="LName" type="string"/>
+<Field __index="2" __sourcePath="{}/Output/RollNumber" containerType="SINGLE" label="RollNumber" name="RollNumber" type="integer"/>
+<Field __sourcePath="{}/Output/Processed_x0020On" containerType="SINGLE" label="Processed On" name="Processed_On" type="string"/>
+</Record>
+</Metadata>
+<Dictionary>
+<Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
+<Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
+<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry2" input="true" name="Time" output="false" type="string"/>
+</Dictionary>
+</Global>
+<Phase number="0">
+<Node charset="UTF-8" enabled="enabled" fileURL="dict:inputPayload" guiName="CSV READER" guiX="20" guiY="20" id="DATA_READER0" quoteCharacter="both" quotedStrings="true" skipRows="1" trim="true" type="DATA_READER">
+<attr name="_data_format"><![CDATA[CSV]]></attr>
+<attr name="__dataSourceDefinition"><![CDATA[C:/Users/861322/Desktop/Input.csv]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'Input' -&gt; 'Output'" guiX="460" guiY="20" id="FOREACH_INPUT_OUTPUT" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = num2str(input.__id);
+//END -> DO NOT REMOVE
+output.RollNumber = input.RollNumber;
+output.LName = input.LastName;
+output.FName = input.FirstName;
+output.Processed_On = inputArguments.Time;]]></attr>
+</Node>
+<Node cacheInMemory="true" charset="UTF-8" enabled="enabled" fileURL="dict:outputPayload" guiName="JSON WRITER" guiX="900" guiY="20" id="JSON_WRITER0" type="JSON_WRITER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<clover:collection clover:name="Output" xmlns:clover="http://www.cloveretl.com/ns/xmlmapping">
+  <item clover:inPort="0">
+    <FName>$0.FName</FName>
+    <LName>$0.LName</LName>
+    <RollNumber>$0.RollNumber</RollNumber>
+    <clover:element clover:name="Processed On">$0.Processed_On</clover:element>
+  </item>
+</clover:collection>]]></attr>
+<attr name="_data_format"><![CDATA[JSON]]></attr>
+</Node>
+<Edge debugMode="true" fromNode="DATA_READER0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="557fbffe-e41d-4f19-b8b7-746b91ea75b8" outPort="Port 0 (output)" toNode="FOREACH_INPUT_OUTPUT:0"/>
+<Edge debugMode="true" fromNode="FOREACH_INPUT_OUTPUT:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="ae68d042-da8b-41d0-9e9a-6d0a3d7cc109" outPort="Port 0 (out)" toNode="JSON_WRITER0:0"/>
+</Phase>
+</Graph>
