@@ -20,7 +20,6 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
                 <data-mapper:input-argument key="Time">#[server.dateTime.format('dd-MMM-yyyy HH:mm:ss')]</data-mapper:input-argument>
             </data-mapper:input-arguments>
         </data-mapper:transform>
-        <object-to-string-transformer doc:name="Object to String"/>
-        <logger message="Output Message #[payload]" level="INFO" doc:name="Logger"/>
+        <logger message="Output Message #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
     </flow>
 </mule>
